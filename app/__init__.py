@@ -6,12 +6,6 @@ def create_app():
     app.config.from_object('config')
     app.config.from_pyfile('config_dev.py')
     CORS(app, support_credentials=True)
-    
-    @app.route('/', methods=['GET', 'POST'])
-    def index():
-        if request.method == 'POST':
-            return redirect('http://127.0.0.1:5000/')
-        return render_template("index.html")
 
     with app.app_context():
         from .routes import user, ctrl_panel 
