@@ -1,16 +1,27 @@
 from flask.views import MethodView
 from flask import request, jsonify
+from flask import current_app as app
 
+import jwt
+import datetime
+
+from app.db.model import User
+from app.db.dbtool import DBTool
+from app.helpers.encrypt_pass import Crypt
+
+
+dbt = DBTool()
+cry = Crypt()
 
 class Login(MethodView):
 
     def post(self):
         try:
-            #user_log = request.get_json()
-            business_email = request.form.get('business_email')
-            business_password = request.form.get('business_password')
-            print(business_email, business_password)
-            return jsonify({'status':'ok'}), 200
+            user_log = request.get_json()
+            user_exists = dbt.get_by_email(User, user_log['businessEmail'])
+            if 'exception' in user_exists:
+                return jsonify(user_exists)
+            return jsonify({'status':'ok', 'user-data': user_exists})
             # Verificar que el correo del usuario existe
             # si no existe retornar error, el usuario no esta registrado.
             # si existe verificar si la contrasena es correcta

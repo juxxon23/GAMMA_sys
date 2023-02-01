@@ -1,6 +1,8 @@
 from flask import Flask, request, render_template, redirect 
 from flask_cors import CORS
 
+from app.db.model import db
+
 def create_app():
     app = Flask(__name__, instance_relative_config=True)
     app.config.from_object('config')
@@ -10,6 +12,7 @@ def create_app():
     with app.app_context():
         from .routes import user, ctrl_panel 
         add_routes(app, user, ctrl_panel)
+        db.init_app(app)
         return app
 
 def add_routes(app, user, ctrl_panel):
