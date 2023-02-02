@@ -7,7 +7,6 @@ class DBTool:
         try:
             for new in args:
                 db.session.add(new)
-                print('hello')
                 db.session.commit()
             return 'ok'
         except Exception as ex:
