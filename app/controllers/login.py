@@ -8,19 +8,26 @@ import datetime
 from app.db.model import User
 from app.db.dbtool import DBTool
 from app.helpers.encrypt_pass import Crypt
-
+from app.helpers.exc_handler import ExceptionHandler
+from app.validators.user_val import LoginUser
 
 dbt = DBTool()
 cry = Crypt()
+exh = ExceptionHandler()
+log_schema = LoginUser()
 
 class Login(MethodView):
 
     def post(self):
         try:
             user_log = request.get_json()
+            errors = log_schema.validate(user_log)
+            if errors:
+                return jsonify({'status':'validators', 'error':errors}), 400
             user_exists = dbt.get_by_email(User, user_log['businessEmail'])
-            if user_exists is None:
-                return jsonify(user_exists)
+            msg = exh.wrap(user_exists)
+            if msg.get('status') != 'ok':
+                return jsonify(msg)
             if cry.check_hash(user_log['businessPassword'],
                                user_exists.business_password):
                 encoded_jwt = jwt.encode({'exp':
