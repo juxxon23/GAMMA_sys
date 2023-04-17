@@ -10,13 +10,13 @@ def create_app():
     CORS(app, support_credentials=True)
 
     with app.app_context():
-        from .routes import user, ctrl_panel 
-        add_routes(app, user, ctrl_panel)
+        from .routes import user, item, ctrl_panel 
+        add_routes(app, user, item, ctrl_panel)
         db.init_app(app)
         return app
 
-def add_routes(app, user, ctrl_panel):
-        #User routes
+def add_routes(app, user, item, ctrl_panel):
         app.add_url_rule(user['login'], view_func=user['view_func_login'])
         app.add_url_rule(user['register'], view_func=user['view_func_register'])
+        app.add_url_rule(item['product'], view_func=item['view_func_product'])
         app.add_url_rule(ctrl_panel['panel'], view_func=ctrl_panel['view_func_panel']) 

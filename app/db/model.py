@@ -22,4 +22,20 @@ class User(db.Model):
         self.plan_type = plan_type
         self.business_email = business_email
         self.business_password = business_password
- 
+
+class Product(db.Model):
+    
+    __tablename__ = 'Product'
+
+    product_id = db.Column(db.String(10), primary_key=True, nullable=False)
+    product_name = db.Column(db.String(30), nullable=False)
+    product_description = db.Column(db.String(60), nullable=False)
+    product_price = db.Column(db.Float, nullable=False)
+
+    def __init__(self, product_id, product_name, product_description,
+                 product_price):
+        self.product_id = product_id
+        self.product_name = product_name
+        self.product_description = product_description
+        self.product_price = product_price
+

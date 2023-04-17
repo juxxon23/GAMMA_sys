@@ -39,8 +39,19 @@ class DBTool:
 
 
     def get_by_email(self, table_name, value):
+        # Limitar table_name a la tabla del usuario porque es la unica
+        # que posee email.
         try:
             data = db.session.query(table_name).filter_by(business_email=value).first()
             return data
         except Exception as ex:
             error_msg = {'exception': 'dbtool_get_by_email', 'ex': str(ex)}
+
+
+    def get_by_product(self, table_name, value):
+        # table_name corresponde a la tabla de productos.
+        try:
+            data = db.session.query(table_name).filter_by(product_id=value).first()
+            return data
+        except Exception as ex:
+            error_msg = {'exception': 'dbtool_get_by_product', 'ex': str(ex)}
